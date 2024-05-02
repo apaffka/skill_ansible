@@ -1,0 +1,11 @@
+---
+- name: setup php-fpm
+  hosts: web
+  gather_facts: no
+  become: yes
+  vars:
+    php_file_source: /opt/files/index.php
+    www_file_source: /opt/files/www.conf
+
+  roles:
+    - php

@@ -1,0 +1,12 @@
+---
+- name: setup nginx server
+  hosts: http
+  become: yes
+  gather_facts: no
+  vars:
+    nginx_conf_source: /opt/files/my_nginx.conf
+    nginx_conf_destination: /etc/nginx/sites-enabled/my_nginx.conf
+    php_file_source: /opt/files/index.php
+
+  roles:
+    - http

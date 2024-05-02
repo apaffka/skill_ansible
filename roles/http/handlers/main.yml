@@ -1,0 +1,7 @@
+---
+# handlers file for http
+- name: restart nginx due to config has been changed
+  listen: nginx_restart
+  ansible.builtin.service:
+    name: nginx
+    state: restarted

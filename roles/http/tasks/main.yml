@@ -1,0 +1,49 @@
+---
+# tasks file for http
+
+- name: install web server
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: check nginx is enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: delete default config
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled
+    state: absent
+
+- name: create directory for configs
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled
+    state: directory
+
+- name: copy nginx config
+  ansible.builtin.copy:
+    src: '{{nginx_conf_source}}'
+    dest: /etc/nginx/sites-enabled/
+  notify: nginx_restart
+
+- name: delete site directory
+  ansible.builtin.file:
+    path: /var/www
+    state: absent
+
+- name: create directory for sites
+  ansible.builtin.file:
+    path: /var/www
+    state: directory
+
+- name: create directory mysite
+  ansible.builtin.file:
+    path: /var/www/mysite
+    state: directory
+
+- name: copy php file
+  ansible.builtin.copy:
+    src: '{{php_file_source}}'
+    dest: /var/www/mysite/index.php

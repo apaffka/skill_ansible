@@ -1,0 +1,28 @@
+---
+# tasks file for php
+
+- name: install php-fpm
+  ansible.builtin.apt:
+    name: php-fpm
+    state: present
+
+- name: create directory for sites
+  ansible.builtin.file:
+    path: /var/www/mysite
+    state: directory
+
+- name: copy php file
+  ansible.builtin.copy:
+    src: '{{php_file_source}}'
+    dest: /var/www/mysite/index.php
+
+- name: delete default www configuration
+  ansible.builtin.file:
+    path: /etc/php/8.1/fpm/pool.d/www.conf
+    state: absent
+
+- name: copy www configuration
+  ansible.builtin.copy:
+    src: '{{www_file_source}}'
+    dest: /etc/php/8.1/fpm/pool.d/www.conf
+  notify: restart_php-fpm
